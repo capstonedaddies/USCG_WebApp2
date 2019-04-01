@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>USCG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+      integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+      integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+      integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      $(document).ready(function() {
+        window.onresize = function() {
+          console.log(window.innerWidth);
+          if (window.innerWidth < 450) {
+            $(".title-text").html("United States<br>Coast Guard");
+          } else {
+            $(".title-text").html("United States Coast Guard");
+          }
+        };
+      });
+    </script>
+  </head>
+
+  <body>
+    <!--Nav Bar and Sign in-->
+    <header id="header">
+      <div class="skin-header-background">
+        <div class="skin-header row">
+          <div class="cg-logo col-sm-12 col-md-2">
+            <a href="http://www.uscg.mil/" target="">
+              <img
+                src="../assets/USCG_Emblem.png"
+                alt="United States Coast Guard Logo"
+                title="United States Coast Guard"
+                style="max-height: 100%"
+              />
+            </a>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <div class="skin-title">
+              <a href="https://www.uscg.mil/" title="United States Coast Guard">
+                <div class="hidden-xs">
+                  <span class="title-text withsub"
+                    >United States Coast Guard</span
+                  >
+                  <span class="subtitle-text"
+                    >U.S. Department of Homeland Security</span
+                  >
+                </div>
+                <div class="visible-xs title-text">
+                  United States Coast Guard
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <!--Authentication Form-->
+            <form action="postsign" [formGroup]="login" (ngSubmit)="Login(login.value)">
+              <div class="form-group login-form">
+                <div class="row">
+                  <div class="col-sm-12">
+                  <label style="color: red;" *ngIf="errors">{{ errors }}</label><br>
+                    Email: <input class="input" type="email" formControlName="email" />
+                  </div>
+                  <div class="col-sm-12">
+                    Password: <input type="password" formControlName="password" />
+                  </div>
+                  <div class="col-sm-12 form-submit">
+                    <button class="btn btn-submit" type="submit" name="submit" value="SignIn" [disabled]="!login.valid">
+                      Sign In
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="otnav nopad">
+          <nav class="nav-main">
+            <ul class="nav nav-main">
+              <li class="dropdown  top-level ">
+                <a
+                  href="https://www.uscg.mil/home/"
+                  target=""
+                  tabindex="0"
+                  aria-expanded="false"
+                  >USCG Home<span class="fa fa-lg fa-angle-down"></span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <footer>
+      <div class="skin-footer-background">
+        <div class="skin-footer row">
+          <div class="col-sm-12 col-md-5 semper-paratus">
+            <img
+              src="../assets/semper-paratus.png"
+              alt="semper paratus always ready"
+              title="Semper Paratus"
+              style="max-height: 100%"
+            />
+          </div>
+          <div class="col-sm-12 col-md-3">
+            <!--<h1>Middle</h1>-->
+          </div>
+          <div class="col-sm-12 col-md-4 skin-social">
+            <div class="row">
+              <div class="col-sm-12 stay-connected">
+                <h3>Stay Connected</h3>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <ul>
+                  <li>
+                    <a
+                      href="http://www.facebook.com/UScoastguard"
+                      title=""
+                      target="_blank"
+                    >
+                      <i
+                        class="social-icon fab fa-facebook-f social-link-11"
+                      ></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="http://www.facebook.com/UScoastguard"
+                      title=""
+                      target="_blank"
+                    >
+                      <i class="social-icon fab fa-twitter social-link-11"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="http://www.facebook.com/UScoastguard"
+                      title=""
+                      target="_blank"
+                    >
+                      <i class="social-icon fab fa-youtube social-link-11"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="http://www.facebook.com/UScoastguard"
+                      title=""
+                      target="_blank"
+                    >
+                      <i
+                        class="social-icon fab fa-linkedin-in social-link-11"
+                      ></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+

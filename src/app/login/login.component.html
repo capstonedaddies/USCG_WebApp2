@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Welcome to USCG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+        crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+        crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+        crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+            window.onresize = function () {
+                console.log(window.innerWidth);
+                if (window.innerWidth < 450) {
+                    $(".title-text").html("United States<br>Coast Guard");
+                } else {
+                    $(".title-text").html("United States Coast Guard");
+                }      
+            };
+
+            //modal closes on click
+            $( ".modal-close" ).click(function() {
+                console.log("clicked");
+                $('.message-modal').hide();
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <!--Nav Bar and Sign in-->
+    <header id="header">
+        <div class="skin-header-background">
+            <div class="skin-header row">
+                <div class="cg-logo col-sm-12 col-md-2">
+                    <a href="http://www.uscg.mil/" target="">
+                        <img src="../assets/USCG_Emblem.png" alt="United States Coast Guard Logo" title="United States Coast Guard"
+                            style="max-height: 100%" />
+                    </a>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="skin-title">
+                        <a href="https://www.uscg.mil/" title="United States Coast Guard">
+                            <div class="hidden-xs">
+                                <span class="title-text withsub">United States Coast Guard</span>
+                                <span class="subtitle-text">U.S. Department of Homeland Security</span>
+                            </div>
+                            <div class="visible-xs title-text">
+                                United States Coast Guard
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <!--Authentication Form-->
+                    <h4>Welcome _____</h4>
+
+                </div>
+            </div>
+            <div class="otnav nopad">
+                <nav class="nav-main">
+                    <ul class="nav nav-main">
+                        <li class="dropdown  top-level ">
+                            <a href="https://www.uscg.mil/home/" target="" tabindex="0" aria-expanded="false">USCG Home<span
+                                    class="fa fa-lg fa-angle-down"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!--UI For the Rescue Tool-->
+    <section>
+        <div class="rescue-tools">
+            <div class="row rescue-tool-top">
+                <h1 style="padding-left: 15px;">TOP</h1>
+            </div>
+            <!--Displays info of currently selected boater-->
+            <div class="row rescue-tool-bottom">
+                <div class="col-sm-5">
+                    <img src="../assets/temp-avatar.png">
+                </div>
+                <div class="col-sm-7">
+                    <h2>John Smith</h2>
+                    <ol>
+                        <li>xxxxxxxxxx</li>
+                        <li>xxxxxxxxxx</li>
+                        <li>xxxxxxxxxx</li>
+                        <li>xxxxxxxxxx</li>
+                    </ol>
+                </div>            
+            </div>
+        </div>
+        <div class="rescue-map">
+            <agm-map id="map" style="height: 100%" [latitude]="lat" [longitude]="long">
+                <agm-marker [latitude]="mLat" [longitude]="mLong" [iconUrl]="{
+                    url: 'https://img.icons8.com/color/40/000000/us-coast-guard.png',
+                    scaledSize: {
+                        width: 40,
+                        height: 40
+                    }
+                }"></agm-marker>
+            </agm-map>
+        </div>
+    </section>
+
+    <!--Message Modal-->
+    <div class="message-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-close" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Script to Manage Map-->
+    <script>
+        var map;
+        var marker;
+        //temp boats
+        var tempBoat;
+        var tempBoat2;
+        var tempBoat3;
+        
+        function initMap() {
+            var homeLongLat = {lat: 36.9168, lng: -76.1897};
+            var homeIcon = 'https://img.icons8.com/color/40/000000/us-coast-guard.png';
+
+            //temp boater, live site will have a for loop generating boaters from the database
+            var boatLongLat = {lat: 36.975875, lng: -74.866134};
+            var boat2LongLat = {lat: 36.777477, lng: -75.325754};
+            var boat3LongLat = {lat: 36.498321, lng: -74.537524};
+            var boatIcon = 'https://img.icons8.com/ios-glyphs/15/000000/fishing-boat.png';
+            var emergencyIcon = 'https://img.icons8.com/office/30/000000/lifebuoy.png';
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 36.975875, lng: -74.5},
+                zoom: 8
+            });
+
+            marker = new google.maps.Marker({
+                position: homeLongLat,
+                map: map,
+                title: 'USCG Station Little Creek',
+                icon: homeIcon
+
+            });
+
+            tempBoat = new google.maps.Marker({
+                position: boatLongLat,
+                map: map,
+                title: 'John Smith\'s Boat',
+                icon: boatIcon
+            });
+
+            google.maps.event.addListener(tempBoat, 'click', function() {
+                $('.message-modal').show();
+            });
+
+            tempBoat2 = new google.maps.Marker({
+                position: boat2LongLat,
+                map: map,
+                title: 'Jim Doe\'s Boat',
+                icon: boatIcon
+            });
+
+            google.maps.event.addListener(tempBoat2, 'click', function() {
+                $('.message-modal').show();
+            });
+
+            tempBoat3 = new google.maps.Marker({
+                position: boat3LongLat,
+                map: map,
+                title: 'Alex Smith\'s Boat',
+                icon: emergencyIcon
+            });
+
+            google.maps.event.addListener(tempBoat3, 'click', function() {
+                $('.message-modal').show();
+            });
+
+        }
+    </script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzTHFD3rKgOSkxj1EhCh3-brXhf_K4WHw&callback=initMap"
+    async defer>
+    </script> -->
+</body>
+
+</html>
