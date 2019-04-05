@@ -111,6 +111,19 @@
                         height: 40
                     }
                 }"></agm-marker>
+                <agm-marker *ngFor="let ship of myShips; let i = index" ng-click="clickMe()" [latitude]="ship.lat" [longitude]="ship.lon" [iconUrl]="{
+                    url: 'https://img.icons8.com/color/40/000000/us-coast-guard.png',
+                    scaledSize: {
+                        width: 40,
+                        height: 40
+                    }
+                }">
+                    <agm-info-window [disableAutoPan]="true">
+                        <p><strong>Name: {{ship.name}}</strong></p>
+                        <p><strong>Latitude: {{ship.lat}}</strong></p>
+                        <p><strong>Longitude: {{ship.lon}}</strong></p>
+                    </agm-info-window>
+                </agm-marker>
             </agm-map>
         </div>
     </section>

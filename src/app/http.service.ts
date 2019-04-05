@@ -1,7 +1,8 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from 'ngx-webstorage';
 import * as fb from 'firebase';
+import 'firebase/database';
 import { environment } from '../environments/environment';
 
 interface Location {
@@ -12,16 +13,18 @@ interface Location {
 @Injectable({
   providedIn: 'root'
 })
-export class HttpService implements OnInit {
+export class HttpService {
+
+  ships: any;
 
   constructor(private _http: HttpClient,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
     ) { 
-      this.ngOnInit();
-    }
-
-    ngOnInit(){
       fb.initializeApp(environment.firebase);
+      this.ships = this.getLocations();
+      // this.ships.then((data) => {
+      //   console.log(data);
+      // });
     }
 
   login(data){
@@ -42,6 +45,31 @@ export class HttpService implements OnInit {
   getUser(){
     let thisUser = this.localStorage.retrieve('user');
     return thisUser;
+  }
+
+  // getLocations(){
+  //   return fb.database().ref('user_locations')
+  //   .on('value', this.gotData, this.gotErr)
+  // }
+  // gotData(data){
+  //   let ships = data.val();
+  //   let keys = Object.keys(ships)
+  //   console.log(keys);
+  //   for(var i=0;i<keys.length;i++){
+  //     var Key = keys[i];
+  //     console.log(ships[Key])
+  //   }
+  //   return ships;
+  // }
+  // gotErr(err){
+  //   console.log('ERROR', err)
+  // }
+
+  async getLocations(){
+    return await fb.database().ref('user_locations')
+    .once('value').then((snapshot) => {
+      return snapshot.val();
+    })
   }
 
 }
