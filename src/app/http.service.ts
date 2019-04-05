@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { LocalStorageService } from 'ngx-webstorage';
+import * as fb from 'firebase';
 import { environment } from '../environments/environment';
 
 interface Location {
@@ -12,21 +12,49 @@ interface Location {
 @Injectable({
   providedIn: 'root'
 })
-export class HttpService {
+export class HttpService implements OnInit {
 
-  constructor(private _http: HttpClient, private _Auth: AngularFireAuth, private _db: AngularFireDatabaseModule) { }
+  constructor(private _http: HttpClient,
+    private localStorage: LocalStorageService
+    ) { 
+      this.ngOnInit();
+    }
+
+    ngOnInit(){
+      fb.initializeApp(environment.firebase);
+    }
 
   login(data){
-    let response = this._Auth.auth.signInWithEmailAndPassword(data.email, data.password);
-    // if()
-    console.log(response);
-    return data;
+    let response = fb.auth().signInWithEmailAndPassword(data.email, data.password);
+    response.then(newData => {
+      let thisUser = {
+        'email': newData.user.email,
+        'displayName': newData.user.displayName,
+        'uid': newData.user.uid
+      }
+      this.localStorage.store('user', thisUser);
+    }).catch(error => {
+      console.log(error);
+    })
+    return response;
   }
 
-
-
-  // getLocation(){
-  //   return this._http.get<Location>('https://maps.googleapis.com/maps/api/js?key='+environment.apiKey+'&callback=initMap');
-  // }
+  getUser(){
+    let thisUser = this.localStorage.retrieve('user');
+    return thisUser;
+  }
 
 }
+
+// add to top of login form to create a user with whatever you put in. cheers!
+
+// fb.auth().createUserWithEmailAndPassword(data.email, data.password)
+//   .then((userCredentials)=>{
+//       if(userCredentials.user){
+//         userCredentials.user.updateProfile({
+//           displayName: 'Sean Casaus'
+//         }).then((s)=> {
+//           console.log(s)
+//         })
+//       }
+// })

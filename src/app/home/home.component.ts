@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-home',
@@ -11,37 +12,28 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
 
   login: FormGroup;
-  errors: '';
+  errors: string = '';
   
-  //FIX ERRORS from service
 
-  constructor(private _httpService: HttpService, private fb: FormBuilder, private _router: Router) {
-
+  constructor(private _httpService: HttpService, private fb: FormBuilder, private _router: Router, private localStorage: LocalStorageService) {
+    this.localStorage.clear();
+    this.errors = '';
     this.login = fb.group({
       email: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(3)]],
-      errors: ''
+      password: ['', [Validators.required, Validators.minLength(3)]]
     });
 
   }
 
   Login(post){
     let user = this._httpService.login(post);
-    if(user.errors.length > 1){
-      this.errors = user.errors
-    }
-    else {
+    user.then(() => {
       this._router.navigate(['/login']);
-    }
-    // user.subscribe(data => {
-    //   if('errors' in data){
-    //     console.log(data);
-    //     this.errors = data.errors;
-    //   }
-    //   else {
-    //     this._router.navigate(['/login']);
-    //   }
-    // }); //end subscribe
+    }).catch(error => {
+      if ('message' in error) {
+        this.errors = "Incorrect email address or password";
+      }
+    })
   }
 
   ngOnInit() {
