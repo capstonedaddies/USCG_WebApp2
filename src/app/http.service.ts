@@ -16,15 +16,13 @@ interface Location {
 export class HttpService {
 
   ships: any;
+  messages: any;
 
   constructor(private _http: HttpClient,
     private localStorage: LocalStorageService,
     ) { 
       fb.initializeApp(environment.firebase);
       this.ships = this.getLocations();
-      // this.ships.then((data) => {
-      //   console.log(data);
-      // });
     }
 
   login(data){
@@ -47,24 +45,6 @@ export class HttpService {
     return thisUser;
   }
 
-  // getLocations(){
-  //   return fb.database().ref('user_locations')
-  //   .on('value', this.gotData, this.gotErr)
-  // }
-  // gotData(data){
-  //   let ships = data.val();
-  //   let keys = Object.keys(ships)
-  //   console.log(keys);
-  //   for(var i=0;i<keys.length;i++){
-  //     var Key = keys[i];
-  //     console.log(ships[Key])
-  //   }
-  //   return ships;
-  // }
-  // gotErr(err){
-  //   console.log('ERROR', err)
-  // }
-
   async getLocations(){
     return await fb.database().ref('user_locations')
     .once('value').then((snapshot) => {
@@ -72,6 +52,19 @@ export class HttpService {
     })
   }
 
+  async sendMessage(uid, data){
+    data.name = this.getUser().displayName;
+    fb.database().ref('user_locations/'+uid+'/messages').push(data);
+    this.messages = this.getMessages(uid);
+    return this.messages;
+  }
+
+  async getMessages(uid){
+    return await fb.database().ref('user_locations/'+uid+'/messages')
+    .once('value').then((snapshot) => {
+      return snapshot.val();
+    })
+  }
 }
 
 // add to top of login form to create a user with whatever you put in. cheers!

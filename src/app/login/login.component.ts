@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
 import { LocalStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,14 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private _service: HttpService,private _router: Router, private localStorage: LocalStorageService) { }
+  message: FormGroup
+
+  constructor(private _service: HttpService, private fb: FormBuilder , private _router: Router, private localStorage: LocalStorageService) {
+    this.message = fb.group({
+      content: '',
+      name: ''
+    });
+  }
 
   lat: number;
   long: number;
@@ -21,7 +29,12 @@ export class LoginComponent implements OnInit {
   user: any;
   myShips: any;
   shipKeys: any;
-  
+  messager: any;
+  shipUid: any;
+  allKeys: any;
+  messageKeys: any;
+  myMessages: any;
+
   ngOnInit() {
     this.lat = 36.975875;
     this.long = -74.5;
@@ -29,11 +42,12 @@ export class LoginComponent implements OnInit {
     this.mLong = -76.1897;
     this.getUserData();
     this.user;
-    // this._service.ships.then((data) => {
-    //   this.myShips = data;
-    //   console.log('in the login component',data)
-    // })
     this.getShipData();
+    this.messager = {
+      name: 'Messager',
+      image: '',
+      messages: []
+    }
   }
 
   getUserData() {
@@ -46,23 +60,58 @@ export class LoginComponent implements OnInit {
 
   getShipData(){
     this.myShips = [];
+    this.allKeys = [];
     this._service.ships.then((data) => {
       // Get ships from DB
       let ships = data;
       // Get list of keys
       this.shipKeys = Object.keys(ships)
-      console.log(this.shipKeys);
       for(var i=0;i<this.shipKeys.length;i++){
         // CAN USE FORLOOP HERE TO PUSH EACH SHIP OBJECT INTO ARRAY
-        var Key = this.shipKeys[i];
+        let Key = this.shipKeys[i];
+        this.allKeys.push(Key);
         this.myShips.push(ships[Key])
       }
+      console.log(ships);
     })
-    console.log(this.myShips)
   }
 
-  clickMe(){
-    console.log('i got got')
+  clickMe(index,ships){
+    console.log(ships);
+    console.log(this.allKeys[index]);
+    this.shipUid = this.allKeys[index];
+    let result = this.convertObjectToList(ships[index].messages);
+    this.messager = {
+      name: ships[index].First_Name +" "+ ships[index].Last_Name,
+      image: ships[index].Photo,
+      messages: result
+    };
   }
+
+  convertObjectToList(obj) {
+    return Object.keys(obj).map(function(key){
+      let currElement = [key, obj[key]];
+      return currElement;
+    });
+   }
+   
+  Messaging(post){
+    let newPost = {
+      name: '',
+      content: post.content
+    }
+    let newMessage = this._service.sendMessage(this.shipUid, newPost);
+    newMessage.then((data) => {
+      this.messager.messages = this.convertObjectToList(data);
+    });
+  }
+
+  // getMessages(){
+  //   let random = this._service.getMessages(this.shipUid);
+  //   random.then((data) => {
+  //     let messages = data;
+  //     console.log(messages);
+  //   })
+  // }
 
 }

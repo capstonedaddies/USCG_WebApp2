@@ -82,24 +82,27 @@
 
     <!--UI For the Rescue Tool-->
     <section>
-        <div class="rescue-tools">
-            <div class="row rescue-tool-top">
-                <h1 style="padding-left: 15px;">TOP</h1>
-            </div>
+        <div style="height: 85%" class="rescue-tools">
             <!--Displays info of currently selected boater-->
-            <div class="row rescue-tool-bottom">
+            <div style="height: 200px;" class="row rescue-tool-bottom">
                 <div class="col-sm-5">
-                    <img src="../assets/temp-avatar.png">
+                    <h2>{{messager.name}}</h2>
                 </div>
-                <div class="col-sm-7">
-                    <h2>John Smith</h2>
-                    <ol>
-                        <li>xxxxxxxxxx</li>
-                        <li>xxxxxxxxxx</li>
-                        <li>xxxxxxxxxx</li>
-                        <li>xxxxxxxxxx</li>
-                    </ol>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-6">
+                    <img style="height:125px; width:125px" src="{{messager.image}}" onerror="src='../assets/temp-avatar.png'">                    
                 </div>            
+            </div>
+            <br><hr><br>
+            <div style="color: white;" class="container">
+                <div *ngFor="let messages of messager.messages">
+                    <p>{{messages[1].name}}: {{messages[1].content}}</p>
+                </div>
+            <form style="text-align: right; color:black;" action="message" [formGroup]="message" (ngSubmit)="Messaging(message.value)">
+                <input type="text" formControlName="content">
+                <br>
+                <button class="btn" type="submit" name="Send" value="Send">Send</button>
+            </form>
             </div>
         </div>
         <div class="rescue-map">
@@ -111,17 +114,21 @@
                         height: 40
                     }
                 }"></agm-marker>
-                <agm-marker *ngFor="let ship of myShips; let i = index" ng-click="clickMe()" [latitude]="ship.lat" [longitude]="ship.lon" [iconUrl]="{
-                    url: 'https://img.icons8.com/color/40/000000/us-coast-guard.png',
+                <agm-marker *ngFor="let ship of myShips; let i = index" (markerClick)="clickMe(i, myShips)" [latitude]="ship.lat" [longitude]="ship.lon" [iconUrl]="{
+                    url: 'https://img.icons8.com/doodle/48/000000/cruise-ship.png',
                     scaledSize: {
                         width: 40,
                         height: 40
                     }
                 }">
                     <agm-info-window [disableAutoPan]="true">
-                        <p><strong>Name: {{ship.name}}</strong></p>
+                        <p><strong>Name: {{ship.First_Name}} {{ship.Last_Name}}</strong></p>
+                        <p><strong>Vessel Number: {{ship.Vessel_No}}</strong></p>
+                        <p><strong>Mayday: {{ship.mayday}}</strong></p>                        
                         <p><strong>Latitude: {{ship.lat}}</strong></p>
                         <p><strong>Longitude: {{ship.lon}}</strong></p>
+                        <p><strong>Emergency Contact: {{ship.Emergency_Contact_Name}}</strong></p>
+                        <p><strong>Emergency Contact Number: {{ship.Emergency_Contact_Phone}}</strong></p>
                     </agm-info-window>
                 </agm-marker>
             </agm-map>
@@ -148,78 +155,6 @@
             </div>
         </div>
     </div>
-
-    <!--Script to Manage Map-->
-    <script>
-        var map;
-        var marker;
-        //temp boats
-        var tempBoat;
-        var tempBoat2;
-        var tempBoat3;
-        
-        function initMap() {
-            var homeLongLat = {lat: 36.9168, lng: -76.1897};
-            var homeIcon = 'https://img.icons8.com/color/40/000000/us-coast-guard.png';
-
-            //temp boater, live site will have a for loop generating boaters from the database
-            var boatLongLat = {lat: 36.975875, lng: -74.866134};
-            var boat2LongLat = {lat: 36.777477, lng: -75.325754};
-            var boat3LongLat = {lat: 36.498321, lng: -74.537524};
-            var boatIcon = 'https://img.icons8.com/ios-glyphs/15/000000/fishing-boat.png';
-            var emergencyIcon = 'https://img.icons8.com/office/30/000000/lifebuoy.png';
-
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: 36.975875, lng: -74.5},
-                zoom: 8
-            });
-
-            marker = new google.maps.Marker({
-                position: homeLongLat,
-                map: map,
-                title: 'USCG Station Little Creek',
-                icon: homeIcon
-
-            });
-
-            tempBoat = new google.maps.Marker({
-                position: boatLongLat,
-                map: map,
-                title: 'John Smith\'s Boat',
-                icon: boatIcon
-            });
-
-            google.maps.event.addListener(tempBoat, 'click', function() {
-                $('.message-modal').show();
-            });
-
-            tempBoat2 = new google.maps.Marker({
-                position: boat2LongLat,
-                map: map,
-                title: 'Jim Doe\'s Boat',
-                icon: boatIcon
-            });
-
-            google.maps.event.addListener(tempBoat2, 'click', function() {
-                $('.message-modal').show();
-            });
-
-            tempBoat3 = new google.maps.Marker({
-                position: boat3LongLat,
-                map: map,
-                title: 'Alex Smith\'s Boat',
-                icon: emergencyIcon
-            });
-
-            google.maps.event.addListener(tempBoat3, 'click', function() {
-                $('.message-modal').show();
-            });
-
-        }
-    </script>
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzTHFD3rKgOSkxj1EhCh3-brXhf_K4WHw&callback=initMap"
-    async defer>
-    </script> -->
 </body>
 
 </html>
