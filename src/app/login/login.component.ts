@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
     this.user;
     this.getShipData();
     this.messager = {
-      name: 'Messager',
+      name: 'Messanger',
       image: '',
       messages: []
     }

@@ -65,6 +65,10 @@ export class HttpService {
       return snapshot.val();
     })
   }
+  async getMoreMessages(uid){
+    console.log(await fb.database().ref('user_locations/'+uid+'/messages')
+    .on('value', snap => {return snap.val()}))
+  }
 }
 
 // add to top of login form to create a user with whatever you put in. cheers!
