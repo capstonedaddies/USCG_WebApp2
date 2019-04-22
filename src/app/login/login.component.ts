@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
   // This ensures the correct user is logged in and the page cannot be accessed without credentials.
   getUserData() {
     this.user = this._service.getUser();
-    if(this.user.email.length < 1){
+    if(!this.user){
       this._router.navigate(['/home']);
     }
     return this.user;
